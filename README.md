@@ -1,0 +1,2 @@
+# Art-qwiz
+SPA App
