@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css" />
+    <link rel="icon" href="data/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&display=swap" rel="stylesheet">
+    <title>Art-Quiz</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="settings">
+            <div class="settings_header header">
+                <div class="settings_header_el">
+                    <button class="out_settings arrow btn_svg"></button>
+                    <p class="">Settings</p>
+                </div>
+                <div class="settings_header_el">   
+                    <button class="out_settings cross btn_svg"></button>
+                </div>
+            </div>
+            <div class="settings_main">
+                <div class="settings_el">
+                    <p class="settings_txt">Volume</p>
+                    <input type="range" class="volume_on settings_inp">
+                </div>
+                <div class="settings_el">
+                    <p class="settings_txt">Time game</p>
+                    <div class="">
+                    <input id="checkbox" type="checkbox" class="time_on settings_inp">
+                    <label for="checkbox" class="checkbox_txt">On</label>
+                    </div>
+                </div>
+                <div class="settings_el">
+                    <p class="settings_txt">Time to answer</p>
+                    <div class="time_input settings_inp">
+                        <button type="" class="time_btn" onclick="this.nextElementSibling.stepDown(5)">-</button>
+                        <input type="number" min="0" max="30" value="0" readonly class="time_numb">
+                        <button type="" class="time_btn" onclick="this.previousElementSibling.stepUp(5)">+</button>
+                    </div>
+                </div>
+                <div class="button_container settings_button_container">
+                    <button class="main_button settings_button default">Default</button>
+                    <button class="main_button settings_button save">Save</button>
+                </div>
+            </div>
+        </div>
+        <header class="header header_main">
+            <button data-id='on' class="in_settings btn_svg"></button>
+        </header>
+        <main class="main">
+            <div class="main_container">
+                <div class="main_logo"> </div>
+                <div class="button_container">
+                    <button class="main_button artist_quiz">Artist quiz</button>
+                    <button class="main_button pictures_quiz">Pictures quiz</button>
+                </div>
+            </div>
+        </main>
+        <section class="category artist_category hide">
+            <div class="category_container">
+                <div class="category_cards">
+                    <p class="category_title">1</p>
+                    <p id = '0' class="category_img img_black" style="background-image: url('data/category_a/1.jpg');">
+                        <button data-num="0" class="category_score hide"> </button>
+                    </p>
+                </div>
+                <div class="category_cards">
+                    <p class="category_title">2</p>
+                    <p id = '10' class="category_img img_black" style="background-image: url('data/category_a/2.jpg');">
+                        <button data-num="10" class="category_score hide"> </button>
+                    </p>
+
+                </div>
+                <div class="category_cards">
+                    <p class="category_title">3</p>
+                    <p id = '20' class="category_img img_black" style="background-image: url('data/category_a/3.jpg');">
+                        <button data-num="20" class="category_score hide"> </button>
+                    </p>
+
+                </div>
+                <div class="category_cards">
+                    <p class="category_title">4</p>
+                    <p id = '30' class="category_img img_black" style="background-image: url('data/category_a/4.jpg');">
+                        <button data-num="30" class="category_score hide"> </button>
+                    </p>
+
+                </div>
+                <div class="category_cards">
+                    <p class="category_title">5</p>
+                    <p id = '40' class="category_img img_black" style="background-image: url('data/category_a/5.jpg');">
+                        <button data-num="40" class="category_score hide"> </button>
+                    </p>
+
+                </div>
+                <div class="category_cards">
+                    <p class="category_title">6</p>
+                    <p id = '50' class="category_img img_black" style="background-image: url('data/category_a/6.jpg');">
+                        <button data-num="50" class="category_score hide"> </button>
+                    </p>
+
+                </div>
+                <div class="category_cards">
+                    <p class="category_title">7</p>
+                    <p id = '60' class="category_img img_black" style="background-image: url('data/category_a/7.jpg');">
+                        <button data-num="60" class="category_score hide"> </button>
+                    </p>
+                    
+                </div>
+                <div class="category_cards">
+                    <p class="category_title">8</p>
+                    <p id = '70' class="category_img img_black" style="background-image: url('data/category_a/8.jpg');"> 
+                        <button data-num="70" class="category_score hide"> </button>
+                    </p>
+
+                </div>
+                <div class="category_cards">
+                    <p class="category_title">9</p>
+                    <p id = '80' class="category_img img_black" style="background-image: url('data/category_a/9.jpg');">
+                        <button data-num="80" class="category_score hide"> </button>
+                    </p>
+
+                </div>
+                <div class="category_cards">
+                    <p class="category_title">10</p>
+                    <p id = '90' class="category_img img_black" style="background-image: url('data/category_a/10.jpg');">
+                        <button data-num="90" class="category_score hide"> </button>
+                    </p>
+
+                </div>
+                <div class="category_cards">
+                    <p class="category_title">11</p>
+                    <p id = '100' class="category_img img_black" style="background-image: url('data/category_a/11.jpg');">
+                        <button data-num="100" class="category_score hide"> </button>
+                    </p>
+
+                </div>
+                <div class="category_cards">
+                    <p class="category_title">12</p>
+                    <p id = '110' class="category_img img_black" style="background-image: url('data/category_a/12.jpg');">
+                        <button data-num="110" class="category_score hide"> </button>
+                    </p>
+
+                </div>
+            </div>
+        </section>
+        <section class="category pictures_category hide">
+            <div class="category_container">                
+                <div class="category_cards">
+                <p class="category_title">1</p>
+                <p id = '120' class="category_img img_black" style="background-image: url('data/category_p/13.jpg');">
+                    <button data-num="120" class="category_score hide"> </button>
+                </p>
+            </div>
+            <div class="category_cards">
+                <p class="category_title">2</p>
+                <p id = '130' class="category_img img_black" style="background-image: url('data/category_p/14.jpg');">
+                    <button data-num="130" class="category_score hide"> </button>
+                </p>
+
+            </div>
+            <div class="category_cards">
+                <p class="category_title">3</p>
+                <p id = '140' class="category_img img_black" style="background-image: url('data/category_p/15.jpg');"> 
+                    <button data-num="140" class="category_score hide"> </button>
+                </p>
+
+            </div>
+            <div class="category_cards">
+                <p class="category_title">4</p>
+                <p id = '150' class="category_img img_black" style="background-image: url('data/category_p/16.jpg');">
+                    <button data-num="150" class="category_score hide"> </button>
+                </p>
+
+            </div>
+            <div class="category_cards">
+                <p class="category_title">5</p>
+                <p id = '160' class="category_img img_black" style="background-image: url('data/category_p/17.jpg');">
+                    <button data-num="160" class="category_score hide"> </button>
+                </p>
+
+            </div>
+            <div class="category_cards">
+                <p class="category_title">6</p>
+                <p id = '170' class="category_img img_black" style="background-image: url('data/category_p/18.jpg');">
+                    <button data-num="170" class="category_score hide"> </button>
+                </p>
+
+            </div>
+            <div class="category_cards">
+                <p class="category_title">7</p>
+                <p id = '180' class="category_img img_black" style="background-image: url('data/category_p/19.jpg');">
+                    <button data-num="180" class="category_score hide"> </button>
+                </p>
+                
+            </div>
+            <div class="category_cards">
+                <p class="category_title">8</p>
+                <p id = '190' class="category_img img_black" style="background-image: url('data/category_p/20.jpg');">
+                    <button data-num="190" class="category_score hide"> </button>
+                </p>
+
+            </div>
+            <div class="category_cards">
+                <p class="category_title">9</p>
+                <p id = '200' class="category_img img_black" style="background-image: url('data/category_p/21.jpg');">
+                    <button data-num="200" class="category_score hide"> </button>
+                </p>
+
+            </div>
+            <div class="category_cards">
+                <p class="category_title">10</p>
+                <p id = '210' class="category_img img_black" style="background-image: url('data/category_p/22.jpg');">
+                    <button data-num="210" class="category_score hide"> </button>
+                </p>
+
+            </div>
+            <div class="category_cards">
+                <p class="category_title">11</p>
+                <p id = '220' class="category_img img_black" style="background-image: url('data/category_p/23.jpg');">
+                    <button data-num="220" class="category_score hide"> </button>
+                </p>
+
+            </div>
+            <div class="category_cards">
+                <p class="category_title">12</p>
+                <p id = '230' class="category_img img_black" style="background-image: url('data/category_p/24.jpg');">
+                    <button data-num="230" class="category_score hide"> </button>
+                </p>
+
+            </div>
+            </div>
+        </section>
+        <footer class="footer">
+            <a href="https://rs.school" class="footer-info">RS school</a>
+            <div class="footer-info">2021</div>
+            <a href="https://github.com/Niadi26" class="footer-info">gitHub</a>
+        </footer>
+    </div>
+    <script src='index.js'></script>
+</body>
+</html> 
