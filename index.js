@@ -1,21 +1,3 @@
-//settings
-
-const settingsButtonOn = document.querySelector('.in_settings');
-const settingsBlock = document.querySelector('.settings');
-const settingsButtonOff = document.querySelector('.arrow');
-const settingsButtonOff1 = document.querySelector('.cross');
-const settingsButtonSave = document.querySelector('.save');
-const settingsButtonDefault = document.querySelector('.default');
-
-function addClass(htmlElement, cssElement) {
-    htmlElement.classList.toggle(cssElement);
-}
-
-settingsButtonOn.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
-settingsButtonOff.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
-settingsButtonOff1.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
-settingsButtonSave.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
-settingsButtonDefault.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
 
 //mainnav
 const artistQuizButton = document.querySelector('.artist_quiz');
@@ -28,7 +10,7 @@ const footerBlock = document.querySelector('.footer');
 
 const navHeader = document.createElement('div');
 navHeader.classList.add('navigation_header');
-navHeader.innerHTML = "<a id='home_logo' class='header_logo' href='#'></a><nav class='navigation'><ul class='navigation_container'><li class=''><a href='#' id='home' class='navigation_item'>Home</a> </li><li class=''><a href='#' id='categories' class='navigation_item'>Categories</a></li><li class=''><a href='#' id='categories' class='navigation_item active_nav hide'>Score</a></li></ul></nav>"
+navHeader.innerHTML = "<a id='home_logo' class='header_logo' href='#'></a><nav class='navigation'><ul class='navigation_container'><li class=''><a href='#' id='home' class='navigation_item'>Главная</a> </li><li class=''><a href='#' id='categories' class='navigation_item'>Категории</a></li><li class=''><a href='#' id='categories' class='navigation_item active_nav hide'>Score</a></li></ul></nav>"
    
 
 artistQuizButton.addEventListener('click', ()=> {
@@ -204,7 +186,7 @@ let divQwestion;
   function createPictureQwestion(newAns, autor) {
     divQwestion = document.createElement('div');
         let newQw = document.createElement('div');
-        let exitButton = document.createElement('button')
+        let exitButton = document.createElement('p')
 
         divQwestion.className = 'qwestion';
         exitButton.className = 'qwestion_exit'
@@ -334,18 +316,18 @@ function createResult(index) {
         buttonResult.id = `${index}`
 
     if (index < 1) {
-        textResult.innerHTML = 'Try again!';
+        textResult.innerHTML = 'Не беда, будет лучше!';
         scoreResult.innerHTML = `0/10`;
 
     } else if (index === 10) {
-        textResult.innerHTML = 'Great result!'
+        textResult.innerHTML = 'Отличный результат!'
         scoreResult.innerHTML = `10/10`;
 
     } else {
-        textResult.innerHTML = 'Congratulations!';
+        textResult.innerHTML = 'Поздравляю!';
         scoreResult.innerHTML = `${index}/10`;
     }
-    buttonResult.innerHTML = 'Home'
+    buttonResult.innerHTML = 'Выйти'
 
     blockResult.append(textResult);
     blockResult.append(scoreResult);
@@ -384,9 +366,9 @@ body.addEventListener('click', (e) => {
         buttonExitNo.className = 'qwestion_exit_block';
         buttonExitNo.id = 'qwestion_no'
 
-        textExit.innerHTML = 'Do you really want to quit the game?'
-        buttonExitYes.innerHTML = 'Yes'
-        buttonExitNo.innerHTML = 'No'
+        textExit.innerHTML = 'Хотите покинуть игру?'
+        buttonExitYes.innerHTML = 'Да'
+        buttonExitNo.innerHTML = 'Нет'
 
         blockExit.append(textExit);
         blockExit.append(buttonExitYes);
@@ -487,3 +469,22 @@ body.addEventListener('click', (e) => {
         e.target.append(infoScore);
     }
 })
+
+//settings
+
+const settingsButtonOn = document.querySelector('.in_settings');
+const settingsBlock = document.querySelector('.settings');
+const settingsButtonOff = document.querySelector('.arrow');
+const settingsButtonOff1 = document.querySelector('.cross');
+const settingsButtonSave = document.querySelector('.save');
+const settingsButtonDefault = document.querySelector('.default');
+
+function addClass(htmlElement, cssElement) {
+    htmlElement.classList.toggle(cssElement);
+}
+
+settingsButtonOn.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
+settingsButtonOff.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
+settingsButtonOff1.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
+settingsButtonSave.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
+settingsButtonDefault.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
