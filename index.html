@@ -26,20 +26,13 @@
             <div class="settings_main">
                 <div class="settings_el">
                     <p class="settings_txt">Громкость</p>
-                    <input type="range" class="volume_on settings_inp">
-                </div>
-                <div class="settings_el">
-                    <p class="settings_txt">Игра на время</p>
-                    <div class="">
-                    <input id="checkbox" type="checkbox" class="time_on settings_inp">
-                    <label for="checkbox" class="checkbox_txt">Да</label>
-                    </div>
+                    <input id='sound' type="range" class="volume_on settings_inp">
                 </div>
                 <div class="settings_el">
                     <p class="settings_txt">Время игры</p>
                     <div class="time_input settings_inp">
                         <button type="" class="time_btn" onclick="this.nextElementSibling.stepDown(5)">-</button>
-                        <input type="number" min="0" max="30" value="0" readonly class="time_numb">
+                        <input id='timer' type="number" min="0" max="30" value="0" readonly class="time_numb">
                         <button type="" class="time_btn" onclick="this.previousElementSibling.stepUp(5)">+</button>
                     </div>
                 </div>

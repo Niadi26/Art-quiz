@@ -1,5 +1,4 @@
 
-//mainnav
 const artistQuizButton = document.querySelector('.artist_quiz');
 const picturesQuizButton = document.querySelector('.pictures_quiz');
 const headerBlock = document.querySelector('.header_main'); 
@@ -10,25 +9,27 @@ const footerBlock = document.querySelector('.footer');
 
 const navHeader = document.createElement('div');
 navHeader.classList.add('navigation_header');
-navHeader.innerHTML = "<a id='home_logo' class='header_logo' href='#'></a><nav class='navigation'><ul class='navigation_container'><li class=''><a href='#' id='home' class='navigation_item'>Главная</a> </li><li class=''><a href='#' id='categories' class='navigation_item'>Категории</a></li><li class=''><a href='#' id='categories' class='navigation_item active_nav hide'>Score</a></li></ul></nav>"
-   
+navHeader.innerHTML = `<a id='home_logo' class='header_logo' href='#'></a><nav class='navigation'><ul class='navigation_container'>
+                        <li class=''><a href='#' id='home' class='navigation_item'>Главная</a> </li>
+                        <li class=''><a href='#' id='categories' class='navigation_item active_nav'>Категории</a></li>
+                        <li class=''><a href='#' id='score' class='navigation_item active_nav hide'>Score</a></li></ul></nav>`
 
-artistQuizButton.addEventListener('click', ()=> {
-    headerBlock.classList.add('header_category');
-    headerBlock.prepend(navHeader);
-    mainBlock.classList.add('hide');
-    artistBlock.classList.remove('hide');
-    footerBlock.classList.add('footer_black');
-});
+if (!localStorage.getItem('volumeQuiz')) localStorage.setItem('volumeQuiz', '0');
+if (!localStorage.getItem('timerQuiz')) localStorage.setItem('timerQuiz', '0');
+if (!localStorage.getItem('scoreQuiz')) localStorage.setItem('scoreQuiz', JSON.stringify(new Object));
 
-picturesQuizButton.addEventListener('click', ()=> {
-    headerBlock.classList.add('header_category');
-    headerBlock.prepend(navHeader);
-    mainBlock.classList.add('hide');
-    picturesBlock.classList.remove('hide');
-    footerBlock.classList.add('footer_black');
-});
+//get score if it is
+function getScore() {
+    const prevScore = JSON.parse(localStorage.getItem('scoreQuiz'));
+    const arrScore = Object.entries(prevScore);
+    arrScore.forEach(el => {
+        const result = countScore(el[1]);
+        makeScoreResult(el[0], result);
+    })
+}
+getScore();
 
+  //quiz js
 let getInfo = async function() {
     let result = await fetch('./data/data.json');
     let arr = await result.json();
@@ -40,13 +41,12 @@ function shuffle(array) {
       let j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
-  }
-
-  //quiz js
+}
 
 const body = document.querySelector('body');
 const wrapper = document.querySelector('.wrapper');
-
+const ALL_QUESTIONS = 240;
+const HALF_QUESTIONS = 120;
 let counter;
 let firstNum;
 let randomNum;
@@ -56,12 +56,11 @@ const trueAnswers = [];
 
 function makeImgArr(url, end) {
     let arr = [];
-    for(i=0; i < 240; i++) {
+    for(i=0; i < ALL_QUESTIONS; i++) {
         arr.push(`${url}${i}${end}`)
     }
     return arr
 }
-
 
 body.addEventListener('click', (e) => {
     if (e.target.className === 'category_img' || e.target.className === 'category_img img_black') {
@@ -69,7 +68,7 @@ body.addEventListener('click', (e) => {
         counter = +e.target.id;
         let ind = +e.target.id;
         getInfo().then((arr) => {
-            if(ind < 120) {
+            if(ind < HALF_QUESTIONS) {
             makePossibleAnswers(ind, arr);
             } else {
                 makePossiblePictures(ind, arr);
@@ -87,17 +86,19 @@ function getRandomNum (min, max) {
 }
 
 function makePossibleAnswers(ind, arr) {
-            const autorArray = [];
-            let imgSrc = imgArr[ind];
-            autorArray.push([arr[ind].author, true]);
-            while(autorArray.length < 4) {
-                randomNum = getRandomNum(0, 239);
-               if(!(arr[ind].author === arr[randomNum].author)) {
-                    autorArray.push(arr[randomNum].author);
-               }
-            }
-            shuffle(autorArray);
-            createAnswers(autorArray, imgSrc);
+    const set = new Set();
+    const autorArray = [];
+    let imgSrc = imgArr[ind];
+    set.add([arr[ind].author, true]);
+    while(set.size < 4) {
+        randomNum = getRandomNum(0, ALL_QUESTIONS - 1);
+       if(!(arr[ind].author === arr[randomNum].author)) {
+            set.add(arr[randomNum].author);
+       }
+    }
+    set.forEach((el) => autorArray.push(el));
+    shuffle(autorArray);
+    createAnswers(autorArray, imgSrc);
 }
 
 function makePossiblePictures (ind, arr) {
@@ -105,7 +106,7 @@ function makePossiblePictures (ind, arr) {
     let autor = arr[ind].author;
     picturesArray.push([imgArr[ind], true]);
     while(picturesArray.length < 4) {
-        randomNum = getRandomNum(0, 239);
+        randomNum = getRandomNum(0, ALL_QUESTIONS - 1);
         if(!(arr[ind].author === arr[randomNum].author)) {
             picturesArray.push(imgArr[randomNum]);
         }
@@ -116,50 +117,67 @@ function makePossiblePictures (ind, arr) {
 
 let divQwestion;
 
-  function createQwestion(newAns, imgSrc) {
+let setTimeIndex;
+function showTime(timer, num) {
+    timer.innerHTML = num;
+    if (num === 0) {
+        createInfo(counter, false);
+    } else {
+        setTimeIndex = setTimeout(() => showTime(timer, num - 1), 1000);
+    }
+}
+
+function createQwestion(newAns, imgSrc) {
     divQwestion = document.createElement('div');
-        let newQw = document.createElement('div');
-        let newImg = document.createElement('div');
-        let exitButton = document.createElement('button')
+    let newQw = document.createElement('div');
+    let newImg = document.createElement('div');
+    let exitButton = document.createElement('button')
 
-        divQwestion.className = 'qwestion';
-        exitButton.className = 'qwestion_exit'
-        newQw.className = 'qwestion_el qwestion_txt';
-        newImg.className = 'qwestion_el qwestion_img';
-        newAns.className = 'qwestion_el answer_container';
+    divQwestion.className = 'qwestion';
+    exitButton.className = 'qwestion_exit'
+    newQw.className = 'qwestion_el qwestion_txt';
+    newImg.className = 'qwestion_el qwestion_img';
+    newAns.className = 'qwestion_el answer_container';
 
-        newQw.innerHTML = 'Кто автор этой картины?'
-        const img = new Image();
-        img.src = imgSrc;
-        img.onload = () => {  
-            newImg.style.backgroundImage = `url('${img.src}')`;
-        }
+    const isTimer = localStorage.getItem('timerQuiz');
+    if (isTimer != 0) {
+        const timer = document.createElement('div');
+        divQwestion.prepend(timer);
+        showTime(timer, isTimer);
+    }
 
-        divQwestion.append(exitButton);
-        divQwestion.append(newQw);
-        divQwestion.append(newImg)
-        divQwestion.append(newAns);
-        wrapper.append(divQwestion);     
-        mainBlock.classList.remove('hide');                         
-  }
+    newQw.innerHTML = 'Кто автор этой картины?'
+    const img = new Image();
+    img.src = imgSrc;
+    img.onload = () => {  
+        newImg.style.backgroundImage = `url('${img.src}')`;
+    }
 
-  function createAnswers(arr, imgSrc) {
+    divQwestion.append(exitButton);
+    divQwestion.append(newQw);
+    divQwestion.append(newImg)
+    divQwestion.append(newAns);
+    wrapper.append(divQwestion);     
+    mainBlock.classList.remove('hide');                         
+}
+
+function createAnswers(arr, imgSrc) {
     let inner = document.createElement('div');
-    arr.forEach((el, index) => {
+    arr.forEach((el) => {
         const butt = document.createElement('button');
         butt.className = 'answer_el';                        
         if(Array.isArray(el)){
-            butt.textContent = arr[index][0];
-            butt.id = arr[index][1];
+            butt.textContent = el[0];
+            butt.id = el[1];
         } else {
-            butt.textContent = arr[index];
+            butt.textContent = el;
         }
         inner.append(butt);
         })
     createQwestion(inner, imgSrc);
-  } 
+} 
 
-  function createPictures(arr, autor) {
+function createPictures(arr, autor) {
     let inner = document.createElement('div');
     arr.forEach((el, index) => {
         const butt = document.createElement('button');
@@ -181,29 +199,39 @@ let divQwestion;
         inner.append(butt);
     })
     createPictureQwestion(inner, autor);
-  } 
+} 
 
-  function createPictureQwestion(newAns, autor) {
+function createPictureQwestion(newAns, autor) {
     divQwestion = document.createElement('div');
-        let newQw = document.createElement('div');
-        let exitButton = document.createElement('p')
+    let newQw = document.createElement('div');
+    let exitButton = document.createElement('p')
 
-        divQwestion.className = 'qwestion';
-        exitButton.className = 'qwestion_exit'
-        newQw.className = 'qwestion_el qwestion_txt';
-        newAns.className = 'qwestion_el pictures_container';  
+    divQwestion.className = 'qwestion';
+    exitButton.className = 'qwestion_exit'
+    newQw.className = 'qwestion_el qwestion_txt';
+    newAns.className = 'qwestion_el pictures_container';  
 
-        newQw.innerHTML = `Какую картину написал ${autor}?`
+    const isTimer = localStorage.getItem('timerQuize');
+    if (isTimer != 0) {
+        const timer = document.createElement('div');
+        divQwestion.prepend(timer);
+        showTime(timer, isTimer);
+    }
 
-        divQwestion.append(exitButton);
-        divQwestion.append(newQw);
-        divQwestion.append(newAns);
-        wrapper.append(divQwestion);
-        mainBlock.classList.remove('hide');                                 
-  }
+    newQw.innerHTML = `Какую картину написал ${autor}?`
+
+    divQwestion.append(exitButton);
+    divQwestion.append(newQw);
+    divQwestion.append(newAns);
+    wrapper.append(divQwestion);
+    mainBlock.classList.remove('hide');                                 
+}
 
 body.addEventListener('click', (e) => {
     if (e.target.className === 'answer_el') {
+        clearTimeout(setTimeIndex);
+        const buttons = document.querySelectorAll('.answer_el');
+        buttons.forEach((el) => el.style.pointerEvents = 'none');
         if (e.target.id === 'true') {
             e.target.className = 'answer_el right'
             createInfo(counter, true);
@@ -212,6 +240,9 @@ body.addEventListener('click', (e) => {
             createInfo(counter, false);
         }
     } else if (e.target.className === 'pictures_el') {
+        clearTimeout(setTimeIndex);
+        const buttons = document.querySelectorAll('.pictures_el');
+        buttons.forEach((el) => el.style.pointerEvents = 'none');
         let owerlay = document.createElement('div');
         let key = 'picture';
         if (e.target.id === 'true') {
@@ -240,10 +271,12 @@ function createInfo(index, result, key) {
         let nextInfo = document.createElement('button');
         if(result) {
             trueInfo.className = 'info_result true_index';
-            trueAnswers.push([infoImgArr[index], 'true']);                          
+            trueAnswers.push([infoImgArr[index], 'true']);
+            makeSound('true');                 
         } else {
             trueInfo.className = 'info_result false_index';
-            trueAnswers.push([infoImgArr[index], 'false']);                         
+            trueAnswers.push([infoImgArr[index], 'false']);  
+            makeSound();                       
         }
         imgInfo.className = 'info_img';
         nameInfo.className = 'info_name';
@@ -275,7 +308,7 @@ body.addEventListener('click', (e) => {
     if (e.target.className === 'info_button') {
         if(counter == +firstNum + 9) {
             divInfo.remove();
-            countScore()                                              
+            showScore()                                              
         } else {
         divQwestion.remove();
         ++counter;
@@ -291,29 +324,35 @@ body.addEventListener('click', (e) => {
     }
 })
 
+function showScore() {
+    const result = countScore(trueAnswers);
+    let prevScore = JSON.parse(localStorage.getItem('scoreQuiz'));
+    prevScore[firstNum] = trueAnswers;
+    localStorage.setItem('scoreQuiz', JSON.stringify(prevScore));
+    createResult(result);
+}
 
-function countScore() {
+function countScore(arr) {
     let trueCount = 0;
-    trueAnswers.forEach((el, ind, arr)=> {
-        if(arr[ind][1] === 'true') {
+    arr.forEach((el)=> {
+        if(el[1] === 'true') {
             trueCount += 1;
         }
     });
-    localStorage.setItem(firstNum,JSON.stringify(trueAnswers));
-    createResult(trueCount);
+    return trueCount;
 }
 
 function createResult(index) {
-        let blockResult = document.createElement('div');
-        let textResult = document.createElement('div');
-        let scoreResult = document.createElement('div');
-        let buttonResult = document.createElement('button');
+    let blockResult = document.createElement('div');
+    let textResult = document.createElement('div');
+    let scoreResult = document.createElement('div');
+    let buttonResult = document.createElement('button');
 
-        blockResult.className = 'info_cont';
-        textResult.className = 'result_txt';
-        scoreResult.className = 'result_score';
-        buttonResult.className = 'result_button';
-        buttonResult.id = `${index}`
+    blockResult.className = 'info_cont';
+    textResult.className = 'result_txt';
+    scoreResult.className = 'result_score';
+    buttonResult.className = 'result_button';
+    buttonResult.id = `${index}`
 
     if (index < 1) {
         textResult.innerHTML = 'Не беда, будет лучше!';
@@ -335,21 +374,6 @@ function createResult(index) {
 
     divQwestion.append(blockResult);
 }
-
-
-
-body.addEventListener('click', (e) => {
-    if (e.target.className === 'result_button') {
-        let changeCategory = document.getElementById(`${firstNum}`);
-        let actual_score = changeCategory.getElementsByTagName("button")[0];
-        divQwestion.remove();
-        actual_score.innerHTML = `${e.target.id}/10`;                  
-        actual_score.classList.remove('hide')
-        changeCategory.classList.remove('img_black');
-        footerBlock.classList.remove('footer_black');
-        trueAnswers.length = 0;                                              
-    }
-})
 
 let blockExit;
 body.addEventListener('click', (e) => {
@@ -378,14 +402,29 @@ body.addEventListener('click', (e) => {
     }
 })
 
+//exit of the game
+function exitFromGame() {
+    divQwestion.remove();
+    headerBlock.classList.remove('header_category');
+    navHeader.remove();                                   
+    footerBlock.classList.remove('footer_black');
+    trueAnswers.length = 0;                          
+}
+
+body.addEventListener('click', (e) => {
+    if (e.target.className === 'result_button') {
+        const result = e.target.id;
+        makeScoreResult(firstNum, result);
+        exitFromGame();                              
+    }
+})
+
 body.addEventListener('click', (e) => {
     if (e.target.className === 'qwestion_exit_block') {
         if (e.target.id === 'qwestion_yes') {
-        divQwestion.remove();
-        trueAnswers.length = 0;                                   
-        footerBlock.classList.remove('footer_black'); 
+            exitFromGame();
         } else if (e.target.id === 'qwestion_no') {
-        blockExit.remove();
+            blockExit.remove();
         }
     }
 })
@@ -396,7 +435,7 @@ let scoreBlock;
 function createScore (array, num) {
     let idNum = num;
     scoreBlock = document.createElement('div');
-    scoreBlock.className = 'score_container hide';
+    scoreBlock.className = 'score_container';
     array.forEach((el, index, arr) => {
         let item = document.createElement('div');
         const img = new Image();
@@ -415,38 +454,25 @@ function createScore (array, num) {
     wrapper.append(scoreBlock);
 }
 
+//make circles score
+function makeScoreResult(num, result) {
+    let changeCategory = document.getElementById(`${num}`);
+    let actualScore = changeCategory.getElementsByTagName("button")[0];
+    actualScore.innerHTML = `${result}/10`;
+    actualScore.classList.remove('hide')
+    changeCategory.classList.remove('img_black'); 
+}
+
+//open score container
 body.addEventListener('click', (e) => {
     if (e.target.className === 'category_score') {
-        let num = +e.target.dataset.num;
-        const picturesArr = JSON.parse(localStorage.getItem(`${num}`));
-        createScore(picturesArr, num);
-        mainBlock.classList.remove('hide'); 
-        scoreBlock.classList.remove('hide');
-        artistBlock.classList.add('hide');
-        picturesBlock.classList.add('hide');
+        let num = e.target.dataset.num;
+        const scoreObj = JSON.parse(localStorage.getItem(`scoreQuiz`));
+        createScore(scoreObj[num], num);
     }
 })
 
-headerBlock.addEventListener('click', (e) => {
-    if(e.target.id === 'home_logo' || e.target.id === 'home') {
-        headerBlock.classList.remove('header_category');
-        navHeader.remove();
-        artistBlock.classList.add('hide');
-        picturesBlock.classList.add('hide');
-        mainBlock.classList.remove('hide');
-        footerBlock.classList.remove('footer_black');
-        scoreBlock.classList.add('hide'); 
-    } else if (e.target.id === 'categories') {
-        scoreBlock.classList.add('hide'); 
-        mainBlock.classList.add('hide');
-        if (artistBlock.className === 'category artist_category hide') {
-            artistBlock.classList.remove('hide');
-        } else if (picturesBlock.className === 'category pictures_category hide') {
-            picturesBlock.classList.remove('hide');
-        }
-    }
-})
-
+//show wright answers in container
 body.addEventListener('click', (e) => {
     if (e.target.className === 'score_el' || e.target.className === 'score_el img_black') {
         let num = e.target.dataset.id;
@@ -470,21 +496,76 @@ body.addEventListener('click', (e) => {
     }
 })
 
+// navigation
+function showCategory() {
+    headerBlock.classList.add('header_category');
+    headerBlock.prepend(navHeader);
+    mainBlock.classList.add('hide');
+    footerBlock.classList.add('footer_black');
+}
+
+artistQuizButton.addEventListener('click', ()=> {
+    showCategory();
+    artistBlock.classList.remove('hide');
+});
+
+picturesQuizButton.addEventListener('click', ()=> {
+    showCategory();
+    picturesBlock.classList.remove('hide');
+});
+
+headerBlock.addEventListener('click', (e) => {
+    if(e.target.id === 'home_logo' || e.target.id === 'home') {
+        headerBlock.classList.remove('header_category');
+        navHeader.remove();
+        artistBlock.classList.add('hide');
+        picturesBlock.classList.add('hide');
+        mainBlock.classList.remove('hide');
+        footerBlock.classList.remove('footer_black');
+        if (scoreBlock) scoreBlock.remove();
+    } else if (e.target.id === 'categories') {
+        if (scoreBlock) scoreBlock.remove();
+    }
+})
+
 //settings
 
-const settingsButtonOn = document.querySelector('.in_settings');
 const settingsBlock = document.querySelector('.settings');
+const settingsButtonOn = document.querySelector('.in_settings');
 const settingsButtonOff = document.querySelector('.arrow');
 const settingsButtonOff1 = document.querySelector('.cross');
 const settingsButtonSave = document.querySelector('.save');
 const settingsButtonDefault = document.querySelector('.default');
+const sound = document.getElementById('sound');
+const timer = document.getElementById('timer');
+sound.value = +localStorage.getItem('volumeQuiz') * 100;
+timer.value = +localStorage.getItem('timerQuiz');
 
-function addClass(htmlElement, cssElement) {
-    htmlElement.classList.toggle(cssElement);
+function addClass() {
+    settingsBlock.classList.toggle('settings_on');
 }
 
-settingsButtonOn.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
-settingsButtonOff.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
-settingsButtonOff1.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
-settingsButtonSave.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
-settingsButtonDefault.addEventListener('click', () => addClass(settingsBlock,'settings_on'));
+settingsButtonOn.addEventListener('click', addClass);
+settingsButtonOff.addEventListener('click', addClass);
+settingsButtonOff1.addEventListener('click', addClass);
+
+settingsButtonSave.addEventListener('click', () => {
+    localStorage.setItem('volumeQuiz', `${sound.value / 100}`);
+    localStorage.setItem('timerQuiz', `${timer.value}`);
+    addClass();
+});
+
+settingsButtonDefault.addEventListener('click', () => {
+    sound.value = 0;
+    localStorage.setItem('volumeQuiz', `0`);
+    timer.value = 0;
+    localStorage.setItem('timerQuiz', `0`);
+    addClass();
+});
+
+function makeSound(type) {
+    const sound = new Audio();
+    (type) ? sound.src = './data/correct-answer-sound-3.mp3' : sound.src = './data/incorrect-25.mp3';
+    sound.volume = +localStorage.getItem('volumeQuiz');
+    sound.play();
+}

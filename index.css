@@ -80,7 +80,7 @@ body {
 .navigation_container {
     display: flex;
     align-items: center;
-    column-gap: 50px;
+    column-gap: 40px;
 }
 
 .navigation_item:hover {
@@ -192,7 +192,7 @@ body {
     height: 100%;
     width: 100%;
     position: absolute;
-    z-index: 10;
+    z-index: 100;
     right: -1000px;
     transition: 0.5s;
     background-color: #000;
@@ -263,6 +263,7 @@ input[type=range]::-webkit-slider-thumb {
 
 input[type=range]::-moz-range-track {
         height: 3px;
+        width: 150px;
         border-radius: 20px;
         background-color: rgb(209, 209, 209);
 }
@@ -271,8 +272,8 @@ input[type=range]::-moz-range-thumb  {
         background: #FFBCA2;
         border-radius: 50%;
         cursor: pointer;
-        width: 15px;
-        height: 15px;
+        width: 20px;
+        height: 20px;
         -webkit-appearance: none;
         margin-top: -5px;
 }
@@ -282,42 +283,14 @@ input[type=range]::-moz-range-thumb  {
     font-size: 30px;
 }
 
-.checkbox_txt::before {
-    content: '';
-    display: inline-block;
-    position: absolute;
-    left: 10px;
-    background: #FFFFFF;
-    border: 1px solid #000000;
-    border-radius: 50%;
-    width: 25px;
-    height: 55px;
-    transition: 0.5s;
-}
-
 .time_on:checked ~ label:before {
     background: #ffa17c;
 }
 
-.checkbox_txt {
-    font-size: 30px;
-    padding-left: 10px;
-    cursor: pointer;
-    transition: 0.5s;
-}
-
-.checkbox_txt:hover {
-    color: #FFBCA2;
-}
-
-.time_on {
-    width: 20px;
-    height: 20px;
-}
-
 .time_btn {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
     border-radius: 50%;
     transition: 0.5s;
 }
@@ -328,8 +301,9 @@ input[type=range]::-moz-range-thumb  {
     color: #000;
 }
 .time_numb {
-    width: 50px;
-    height: 15px;
+    width: 120px;
+    height: 25px;
+    border-radius: 20px;
     text-align: center;
 }
 
@@ -355,9 +329,6 @@ input[type=range]::-moz-range-thumb  {
         height: 50px;
         width: 45%;
         padding: 0;
-    }
-    .checkbox_txt::before {
-        display: none;
     }
     .settings_el {
         display: flex;
@@ -715,6 +686,7 @@ input[type=range]::-moz-range-thumb  {
 
 .score_container {
     position: absolute;
+    z-index: 50;
     top: 10vh;
     width: 100%;
     min-height: 80vh;
@@ -771,7 +743,7 @@ input[type=range]::-moz-range-thumb  {
     }
 }
 
-.active_nav{
+.active_nav {
     color: #FFBCA2;
 }
 
