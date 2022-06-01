@@ -354,6 +354,7 @@ input[type=range]::-moz-range-thumb  {
     width: 130px;
     height: 130px;
     background-size: contain;
+    background-color: rgb(71, 71, 71);
 }
 
 .category_cards:hover {
@@ -406,11 +407,12 @@ input[type=range]::-moz-range-thumb  {
     color: #fff;
 }
 .qwestion_img {
-    height: 450px;
+    height: calc(100vh - 400px);
     margin: 0 auto;
     margin-bottom: 20px;
     border-radius: 20px;
     background: center/cover no-repeat;
+    background-color:rgb(71, 71, 71);
 }
 .answer_container {
     display: flex;
@@ -441,9 +443,6 @@ input[type=range]::-moz-range-thumb  {
     .qwestion_txt {
         padding-top: 50px;
         font-size: 18px;
-    }
-    .qwestion_img {
-        height: 350px;
     }
     .answer_el {
         width: 45%;
@@ -605,6 +604,7 @@ input[type=range]::-moz-range-thumb  {
 
 .qwestion_block {
     position: absolute;
+    z-index: 10;
     width: 350px;
     height: 200px;
     top: 50%;
@@ -664,7 +664,7 @@ input[type=range]::-moz-range-thumb  {
     height: 200px;
     margin: 10px;
     border-radius: 30px;
-    background-color: #000;
+    background-color: rgb(71, 71, 71);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -688,8 +688,8 @@ input[type=range]::-moz-range-thumb  {
     position: absolute;
     z-index: 50;
     top: 10vh;
+    bottom: 10vh;
     width: 100%;
-    min-height: 80vh;
     padding: 20px 41px;
     display: flex;
     flex-wrap: wrap;
@@ -757,6 +757,10 @@ input[type=range]::-moz-range-thumb  {
 
 .hide {
     display: none;
+}
+
+.hidden {
+    visibility: hidden;
 }
 
 .wrong {

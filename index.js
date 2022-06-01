@@ -211,7 +211,7 @@ function createPictureQwestion(newAns, autor) {
     newQw.className = 'qwestion_el qwestion_txt';
     newAns.className = 'qwestion_el pictures_container';  
 
-    const isTimer = localStorage.getItem('timerQuize');
+    const isTimer = localStorage.getItem('timerQuiz');
     if (isTimer != 0) {
         const timer = document.createElement('div');
         divQwestion.prepend(timer);
@@ -423,6 +423,7 @@ body.addEventListener('click', (e) => {
     if (e.target.className === 'qwestion_exit_block') {
         if (e.target.id === 'qwestion_yes') {
             exitFromGame();
+            clearTimeout(setTimeIndex);
         } else if (e.target.id === 'qwestion_no') {
             blockExit.remove();
         }
